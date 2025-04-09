@@ -1,0 +1,95 @@
+object ToolsForm: TToolsForm
+  Left = 305
+  Height = 160
+  Top = 250
+  Width = 440
+  AllowDropFiles = True
+  BorderStyle = bsDialog
+  Caption = 'Tools'
+  ClientHeight = 160
+  ClientWidth = 440
+  OnDropFiles = FormDropFiles
+  Position = poOwnerFormCenter
+  ShowHint = True
+  object CbbFileType: TComboBox
+    Left = 24
+    Height = 23
+    Top = 32
+    Width = 407
+    Anchors = [akTop, akLeft, akRight]
+    Enabled = False
+    ItemHeight = 15
+    ItemIndex = 0
+    Items.Strings = (
+      'MP3'
+      'WAV'
+      'FLAC'
+    )
+    ReadOnly = True
+    Style = csDropDownList
+    TabOrder = 0
+    Text = 'MP3'
+  end
+  object BtnRun: TButton
+    Left = 358
+    Height = 26
+    Top = 127
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Caption = 'Run'
+    Enabled = False
+    TabOrder = 1
+    OnClick = BtnRunClick
+  end
+  object CbDeleteFiles: TCheckBox
+    Left = 8
+    Height = 19
+    Top = 8
+    Width = 118
+    Caption = 'Delete files of type:'
+    TabOrder = 2
+    OnChange = CbDeleteFilesChange
+  end
+  object LeFromFolder: TLabeledEdit
+    Left = 24
+    Height = 23
+    Hint = 'Enter the folder path or drag a file here to select it.'
+    Top = 80
+    Width = 220
+    Anchors = [akTop, akLeft, akRight]
+    EditLabel.Height = 15
+    EditLabel.Width = 220
+    EditLabel.Caption = 'From folder:'
+    Enabled = False
+    TabOrder = 3
+    TextHint = 'Choose a folder...'
+  end
+  object BtnChooseFolder: TButton
+    Left = 357
+    Height = 25
+    Top = 79
+    Width = 75
+    Anchors = [akTop, akRight]
+    Caption = 'Choose...'
+    Enabled = False
+    TabOrder = 4
+    OnClick = BtnChooseFolderClick
+  end
+  object BtnSetFromSource: TButton
+    Left = 252
+    Height = 25
+    Hint = 'Use same location as the source folder.'
+    Top = 79
+    Width = 99
+    Anchors = [akTop, akRight]
+    Caption = 'Set from source'
+    Enabled = False
+    TabOrder = 5
+    OnClick = BtnSetFromSourceClick
+  end
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
+    Title = 'Select a folder...'
+    Left = 158
+    Top = 112
+  end
+end
