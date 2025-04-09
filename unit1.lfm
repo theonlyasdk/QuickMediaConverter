@@ -792,7 +792,7 @@ object FormMain: TFormMain
     Anchors = [akTop, akLeft, akRight]
     EditLabel.Height = 15
     EditLabel.Width = 450
-    EditLabel.Caption = 'Source Folder:'
+    EditLabel.Caption = 'Source folder:'
     TabOrder = 0
     TextHint = 'Choose folder with files to convert...'
   end
