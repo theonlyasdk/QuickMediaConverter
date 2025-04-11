@@ -63,6 +63,7 @@ type
     procedure TbBitrateChange(Sender: TObject);
   private
     procedure FormatChanged();
+    procedure SetControlsEnabled(Flag: boolean);
     procedure UpdateBitrate();
   public
 
@@ -266,6 +267,18 @@ begin
   end;
 end;
 
+procedure TFormMain.SetControlsEnabled(Flag: boolean);
+begin
+     BtnConvert.Enabled := Flag;
+     TbSource.Enabled := Flag;
+     TbOutput.Enabled := Flag;
+     BtnChooseOut.Enabled := Flag;
+     BtnChooseSource.Enabled := Flag;
+     BtnOpenFfmpegDl.Enabled := Flag;
+     CbTargetFmt.Enabled := Flag;
+     BtnChooseFfmpeg.Enabled := Flag;
+     BtnSameAsSource.Enabled := Flag;
+end;
 
 procedure TFormMain.BtnConvertClick(Sender: TObject);
 var
@@ -325,6 +338,8 @@ begin
     Exit;
   end;
 
+  SetControlsEnabled(False);
+
   FileFound := FindFirst(SourceDir + '*.*', faAnyFile, SearchRec);
   try
     while FileFound = 0 do
@@ -332,7 +347,7 @@ begin
       if (SearchRec.Attr and faDirectory) = 0 then
       begin
         FileExt := LowerCase(ExtractFileExt(SearchRec.Name));
-        if (FileExt = '.mp3') or (FileExt = '.wav') or (FileExt = '.flac') then
+        if (FileExt = '.mp3') or (FileExt = '.wav') or (FileExt = '.flac') or (FileExt = '.mp4') or (FileExt = '.avi') or (FileExt = '.mov') then
         begin
           Process := TProcess.Create(nil);
           try
@@ -392,6 +407,7 @@ begin
     SysUtils.FindClose(SearchRec);
   end;
 
+  SetControlsEnabled(True);
   StatusBar.SimpleText := 'Conversion completed successfully!';
   ExecOutput.Append('Conversion completed successfully!');
 end;
