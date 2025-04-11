@@ -11,6 +11,7 @@ object AboutForm: TAboutForm
   object LblTitle: TLabel
     Left = 64
     Height = 48
+    Hint = 'Beta software'
     Top = 12
     Width = 401
     Alignment = taCenter
@@ -23,6 +24,8 @@ object AboutForm: TAboutForm
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
   end
   object Panel1: TPanel
     Left = -3
