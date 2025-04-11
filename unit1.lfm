@@ -776,7 +776,7 @@ object FormMain: TFormMain
     Top = 72
     Width = 648
     ActivePage = TabSheet1
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    Anchors = [akTop, akLeft, akRight]
     TabIndex = 0
     TabOrder = 1
     object TabSheet1: TTabSheet
@@ -799,7 +799,7 @@ object FormMain: TFormMain
       object BtnChooseSource: TButton
         Left = 560
         Height = 25
-        Top = 25
+        Top = 24
         Width = 75
         Anchors = [akTop, akRight]
         Caption = 'Choose...'
@@ -869,6 +869,7 @@ object FormMain: TFormMain
         Style = csDropDownList
         TabOrder = 6
         Text = 'Audio - MP3'
+        OnChange = CbTargetFmtChange
       end
       object Label2: TLabel
         Left = 7
@@ -911,18 +912,91 @@ object FormMain: TFormMain
         Height = 212
         Top = 0
         Width = 640
-        HorzScrollBar.Page = 139
-        VertScrollBar.Page = 23
+        HorzScrollBar.Page = 264
+        VertScrollBar.Page = 122
         Align = alClient
-        ClientHeight = 208
-        ClientWidth = 636
+        BorderStyle = bsNone
+        ClientHeight = 212
+        ClientWidth = 640
+        ParentBackground = False
         TabOrder = 0
         object Label1: TLabel
-          Left = 8
+          Left = 10
           Height = 15
-          Top = 8
-          Width = 131
-          Caption = 'Coming in next update...'
+          Top = 7
+          Width = 135
+          Caption = 'Audio Bitrate (MP3 Only):'
+        end
+        object TbBitrate: TTrackBar
+          Left = 3
+          Height = 25
+          Top = 27
+          Width = 572
+          Max = 16
+          Min = 1
+          OnChange = TbBitrateChange
+          Position = 15
+          Anchors = [akTop, akLeft, akRight]
+          Color = 3487029
+          ParentColor = False
+          TabOrder = 0
+        end
+        object LblBitrate: TLabel
+          Left = 569
+          Height = 25
+          Top = 29
+          Width = 66
+          Alignment = taCenter
+          Anchors = [akTop, akRight]
+          AutoSize = False
+          Caption = '96kbps'
+        end
+        object Label3: TLabel
+          Left = 10
+          Height = 15
+          Top = 69
+          Width = 103
+          Caption = 'Audio Sample Rate:'
+        end
+        object SeSampleRate: TSpinEdit
+          Left = 120
+          Height = 23
+          Top = 65
+          Width = 64
+          MaxValue = 192000
+          MinValue = 8000
+          TabOrder = 1
+          Value = 44100
+        end
+        object Label4: TLabel
+          Left = 190
+          Height = 15
+          Top = 69
+          Width = 14
+          Caption = 'Hz'
+        end
+        object CbAudioChannels: TComboBox
+          Left = 120
+          Height = 23
+          Top = 99
+          Width = 144
+          ItemHeight = 15
+          ItemIndex = 0
+          Items.Strings = (
+            'Keep Original'
+            'Mono (1 channel)'
+            'Stereo (2 channels)'
+          )
+          Style = csDropDownList
+          TabOrder = 2
+          Text = 'Keep Original'
+        end
+        object Label5: TLabel
+          Left = 26
+          Height = 15
+          Top = 102
+          Width = 87
+          Caption = 'Audio Channels:'
         end
       end
     end

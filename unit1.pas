@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   lclintf, Windows, FormAbout, FormTools, LCLType,
-  Clipbrd, Buttons, ComCtrls, Process;
+  Clipbrd, Buttons, ComCtrls, Spin, Process;
 
 type
 
@@ -24,7 +24,12 @@ type
     BtnAbout: TButton;
     BtnTools: TButton;
     CbTargetFmt: TComboBox;
+    CbAudioChannels: TComboBox;
     Label1: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    LblBitrate: TLabel;
     LblTitle: TLabel;
     Label2: TLabel;
     ExecOutput: TMemo;
@@ -33,12 +38,14 @@ type
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     SelectDirectoryDialog2: TSelectDirectoryDialog;
     SelectDirectoryDialog3: TSelectDirectoryDialog;
+    SeSampleRate: TSpinEdit;
     StatusBar: TStatusBar;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TbSource: TLabeledEdit;
     TbOutput: TLabeledEdit;
     TbFfmpeg: TLabeledEdit;
+    TbBitrate: TTrackBar;
     procedure BtnAboutClick(Sender: TObject);
     procedure BtnChooseFfmpegClick(Sender: TObject);
     procedure BtnOpenFfmpegDlMouseEnter(Sender: TObject);
@@ -49,10 +56,14 @@ type
     procedure BtnOpenFfmpegDlClick(Sender: TObject);
     procedure BtnSameAsSourceMouseEnter(Sender: TObject);
     procedure BtnToolsClick(Sender: TObject);
+    procedure CbTargetFmtChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of string);
     function HasSupportedMediaFiles(const ADirectory: string): Boolean;
+    procedure TbBitrateChange(Sender: TObject);
   private
+    procedure FormatChanged();
+    procedure UpdateBitrate();
   public
 
   end;
@@ -100,7 +111,39 @@ begin
   end;
 end;
 
+function TrackbarProgressToBitrate(Progress: Integer): string;
+begin
+     // 8, 16, 24, 32, 40, 48, 64, 80, 96, 112, 128, 160, 192, 224, 256, or 320
+     case Progress of
+       1: Exit('8');
+       2: Exit('16');
+       3: Exit('24');
+       4: Exit('32');
+       5: Exit('40');
+       6: Exit('48');
+       7: Exit('64');
+       8: Exit('80');
+       9: Exit('96');
+       10: Exit('112');
+       11: Exit('128');
+       12: Exit('160');
+       13: Exit('192');
+       14: Exit('224');
+       15: Exit('256');
+       16: Exit('320');
+       else Exit('256');
+     end;
+end;
 
+procedure TFormMain.UpdateBitrate();
+begin;
+  LblBitrate.Caption := Concat(TrackbarProgressToBitrate(TbBitrate.Position), 'Kbit/s');
+end;
+
+procedure TFormMain.TbBitrateChange(Sender: TObject);
+begin
+     UpdateBitrate();
+end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
 var
@@ -109,6 +152,8 @@ var
   FileFound: Integer;
   FfmpegDir: string;
 begin
+  UpdateBitrate();
+
   Constraints.MinWidth := Width;
   Constraints.MinHeight := Height;
 
@@ -157,7 +202,7 @@ end;
 procedure TFormMain.BtnOpenFfmpegDlClick(Sender: TObject);
 begin
   OpenURL('https://github.com/BtbN/FFmpeg-Builds/releases');
-  ShowMessage('1. Download ffmpeg-master-latest-win64-lgpl-shared.zip and extract it to your Downloads folder.' + sLineBreak + '2. Choose the directory using the choose button. (Or restart the application and it will automatically detect the folder from Downloads)');
+  MessageDlg('1. Download ffmpeg-master-latest-win64-lgpl-shared.zip and extract it to your Downloads folder.' + #13#10 + '2. Choose the directory using the choose button. (Or restart the application and it will automatically detect the folder from Downloads)', mtInformation, [mbOK], 0);
 end;
 
 procedure TFormMain.BtnSameAsSourceMouseEnter(Sender: TObject);
@@ -168,6 +213,18 @@ end;
 procedure TFormMain.BtnToolsClick(Sender: TObject);
 begin
   ToolsForm.Show;
+end;
+
+procedure TFormMain.FormatChanged();
+begin
+     TbBitrate.Enabled := (CbTargetFmt.ItemIndex = 0);
+     LblBitrate.Caption := '...';
+     if (CbTargetFmt.ItemIndex = 0) then UpdateBitrate();
+end;
+
+procedure TFormMain.CbTargetFmtChange(Sender: TObject);
+begin
+     FormatChanged();
 end;
 
 procedure TFormMain.BtnChooseSourceClick(Sender: TObject);
@@ -196,6 +253,19 @@ begin
   end;
 end;
 
+function StringsToSpaceSeparated(const Strings: TStrings): string;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i := 0 to Strings.Count - 1 do
+  begin
+    if Result <> '' then
+      Result := Result + ' '; // Add a space if it's not the first string
+    Result := Result + Strings[i];
+  end;
+end;
+
 
 procedure TFormMain.BtnConvertClick(Sender: TObject);
 var
@@ -205,29 +275,30 @@ var
   TargetFormat: string;
   SearchRec: TSearchRec;
   FileFound: Integer;
-  Command: string;
   FileExt: string;
   Process: TProcess;
+  OutputOptions, OutputFile: string;
 begin
   SourceDir := Trim(TbSource.Text);
   OutputDir := Trim(TbOutput.Text);
   FfmpegDir := '';
+  OutputOptions := '';
 
   if (SourceDir = '') or (OutputDir = '') then
   begin
-    MessageBox(0, 'Please ensure all fields are filled in.', 'Error', MB_ICONERROR);
+    MessageDlg('Please ensure all fields are filled in.', mtError, [mbOK], 0);
     Exit;
   end;
 
   if not DirectoryExists(SourceDir) then
   begin
-    MessageBox(0, 'The source directory does not exist. Please select a valid directory.', 'Error', MB_ICONERROR);
+    MessageDlg('The source directory does not exist. Please select a valid directory.', mtError, [mbOK], 0);
     Exit;
   end;
 
   if not DirectoryExists(OutputDir) then
   begin
-    MessageBox(0, 'The output directory does not exist.', 'Error', MB_ICONERROR);
+    MessageDlg('The output directory does not exist.', mtError, [mbOK], 0);
     Exit;
   end;
 
@@ -241,7 +312,7 @@ begin
 
   if not DirectoryExists(FfmpegDir) then
   begin
-    MessageBox(0, 'The FFmpeg directory does not exist. Please download it by clicking the download button.', 'Error', MB_ICONERROR);
+    MessageDlg('The FFmpeg directory does not exist. Please download it by clicking the download button.', mtError, [mbOK], 0);
     Exit;
   end;
 
@@ -250,7 +321,7 @@ begin
     1: TargetFormat := 'wav';
     2: TargetFormat := 'flac';
   else
-    MessageBox(0, 'Please select a valid target format.', 'Error', MB_ICONERROR);
+    MessageDlg('Please select a valid target format.', mtError, [mbOK], 0);
     Exit;
   end;
 
@@ -263,26 +334,50 @@ begin
         FileExt := LowerCase(ExtractFileExt(SearchRec.Name));
         if (FileExt = '.mp3') or (FileExt = '.wav') or (FileExt = '.flac') then
         begin
-          Command := Format('"%s%s" -i "%s%s" "%s%s.%s"', [FfmpegDir, PathDelim + 'ffmpeg', SourceDir, SearchRec.Name, OutputDir, ChangeFileExt(SearchRec.Name, ''), TargetFormat]);
-
-          ExecOutput.Lines.Add(Command);
-
           Process := TProcess.Create(nil);
           try
             try
+              // If it is mp3
+              if CbTargetFmt.ItemIndex = 0 then
+              begin
+                   OutputOptions := Format(
+                     '-b:a %s -ar %s',
+                     [Concat(TrackbarProgressToBitrate(TbBitrate.Position), 'K'), SeSampleRate.Value.ToString]
+                   );
+              end;
+
+              if CbAudioChannels.ItemIndex > 0 then
+              begin
+                OutputOptions := OutputOptions + ' ' + Format('-ac %d', [CbAudioChannels.ItemIndex]);
+              end;
+
               Process.Executable := FfmpegDir + PathDelim + 'ffmpeg.exe';
-              Process.Parameters.Add(Format('-i "%s%s" "%s%s.%s"', [SourceDir, SearchRec.Name, OutputDir, ChangeFileExt(SearchRec.Name, ''), TargetFormat]));
+              Process.Parameters.Add(Format('-i "%s%s" %s "%s%s.%s"',
+                 [SourceDir, SearchRec.Name, OutputOptions, OutputDir, ChangeFileExt(SearchRec.Name, ''), TargetFormat]
+              ));
+
+              OutputFile := Format('%s%s.%s', [OutputDir, ChangeFileExt(SearchRec.Name, ''), TargetFormat]);
+              if FileExists(OutputFile) then
+              begin
+                if MessageDlg('File Already exists, continue?', mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+                  Exit;
+              end;
+
+              ExecOutput.Lines.Add(
+                Concat(FfmpegDir, PathDelim, 'ffmpeg.exe', ' ', StringsToSpaceSeparated(Process.Parameters))
+              );
+
               Process.Options := Process.Options + [poUsePipes];
               Process.ShowWindow := swoHIDE;
               Process.Execute;
 
               if Process.ExitCode <> 0 then
               begin
-                MessageBox(0, PChar('Failed to execute FFmpeg command. Exit code: ' + IntToStr(Process.ExitCode)), 'Error', MB_ICONERROR);
+                MessageDlg('Failed to execute FFmpeg command. Exit code: ' + IntToStr(Process.ExitCode), mtError, [mbOK], 0);
                 Exit;
               end;
             except on E: Exception do begin
-              MessageBox(0, 'Error starting process', 'Error', MB_ICONERROR);
+              MessageDlg('Error starting process', mtError, [mbOK], 0);
               StatusBar.SimpleText := 'Conversion error. ';
               end;
           end;
@@ -323,13 +418,13 @@ begin
     // Check if the bin folder exists and if ffmpeg.exe is present
     if not DirectoryExists(FfmpegPath + 'bin') then
     begin
-      MessageBox(0, 'Error: The "bin" subfolder does not exist in the selected directory. Please download the FFmpeg binary zip, extract it to a folder, and select the folder containing the "bin" folder.', 'Error', MB_ICONERROR);
+      MessageDlg('Error: The "bin" subfolder does not exist in the selected directory. Please download the FFmpeg binary zip, extract it to a folder, and select the folder containing the "bin" folder.', mtError, [mbOK], 0);
       Exit;
     end;
 
     if not FileExists(BinPath) then
     begin
-      MessageBox(0, 'Error: The file "ffmpeg.exe" does not exist in the "bin" subfolder. Please download the FFmpeg binary zip, extract it to a folder, and select the folder containing the "bin" folder.', 'Error', MB_ICONERROR);
+      MessageDlg('Error: The file "ffmpeg.exe" does not exist in the "bin" subfolder. Please download the FFmpeg binary zip, extract it to a folder, and select the folder containing the "bin" folder.', mtError, [mbOK], 0);
       Exit;
     end;
 
