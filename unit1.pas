@@ -24,13 +24,18 @@ type
     BtnAbout: TButton;
     BtnTools: TButton;
     CbTargetFmt: TComboBox;
+    Label1: TLabel;
     LblTitle: TLabel;
     Label2: TLabel;
     ExecOutput: TMemo;
+    PageControl1: TPageControl;
+    ScrollBox1: TScrollBox;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     SelectDirectoryDialog2: TSelectDirectoryDialog;
     SelectDirectoryDialog3: TSelectDirectoryDialog;
     StatusBar: TStatusBar;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
     TbSource: TLabeledEdit;
     TbOutput: TLabeledEdit;
     TbFfmpeg: TLabeledEdit;

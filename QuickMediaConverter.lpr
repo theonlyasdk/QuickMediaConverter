@@ -10,12 +10,17 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, unit1, FormAbout, FormTools
-  { you can add units after this };
+  Forms, unit1, FormAbout, FormTools,
+  uDarkStyleParams,
+  uMetaDarkStyle,
+  uDarkStyleSchemes;
 
 {$R *.res}
 
 begin
+  PreferredAppMode := pamAllowDark;
+  uMetaDarkStyle.ApplyMetaDarkStyle(DefaultDark);
+
   RequireDerivedFormResource:=True;
   Application.Scaled:=True;
   Application.Initialize;

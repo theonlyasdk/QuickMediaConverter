@@ -100,6 +100,12 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="metadarkstyledsgn"/>
+      </Item>
+      <Item>
+        <PackageName Value="MetaDarkStyle"/>
+      </Item>
+      <Item>
         <PackageName Value="LCL"/>
       </Item>
     </RequiredPackages>

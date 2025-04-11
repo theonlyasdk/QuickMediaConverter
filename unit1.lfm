@@ -1,12 +1,12 @@
 object FormMain: TFormMain
   Left = 305
-  Height = 469
+  Height = 481
   Top = 250
-  Width = 560
+  Width = 665
   AllowDropFiles = True
   Caption = 'Quick Media Converter'
-  ClientHeight = 469
-  ClientWidth = 560
+  ClientHeight = 481
+  ClientWidth = 665
   Color = clWindow
   Icon.Data = {
     765E00000000010001000000000001002000605E00001600000089504E470D0A
@@ -770,6 +770,163 @@ object FormMain: TFormMain
   OnDropFiles = FormDropFiles
   Position = poDesktopCenter
   ShowHint = True
+  object PageControl1: TPageControl
+    Left = 8
+    Height = 240
+    Top = 72
+    Width = 648
+    ActivePage = TabSheet1
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabIndex = 0
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'General'
+      ClientHeight = 212
+      ClientWidth = 640
+      object TbSource: TLabeledEdit
+        Left = 7
+        Height = 23
+        Hint = 'Enter the path of the source folder or drag a file here to select it.'
+        Top = 25
+        Width = 549
+        Anchors = [akTop, akLeft, akRight]
+        EditLabel.Height = 15
+        EditLabel.Width = 549
+        EditLabel.Caption = 'Source folder:'
+        TabOrder = 0
+        TextHint = 'Choose folder with files to convert...'
+      end
+      object BtnChooseSource: TButton
+        Left = 560
+        Height = 25
+        Top = 25
+        Width = 75
+        Anchors = [akTop, akRight]
+        Caption = 'Choose...'
+        TabOrder = 1
+        OnClick = BtnChooseSourceClick
+      end
+      object TbOutput: TLabeledEdit
+        Left = 7
+        Height = 23
+        Top = 73
+        Width = 447
+        Anchors = [akTop, akLeft, akRight]
+        EditLabel.Height = 15
+        EditLabel.Width = 447
+        EditLabel.Caption = 'Output folder:'
+        TabOrder = 2
+        TextHint = 'Choose output folder...'
+      end
+      object BtnChooseOut: TButton
+        Left = 560
+        Height = 25
+        Top = 72
+        Width = 75
+        Anchors = [akTop, akRight]
+        Caption = 'Choose...'
+        TabOrder = 3
+        OnClick = BtnChooseOutClick
+      end
+      object TbFfmpeg: TLabeledEdit
+        Left = 7
+        Height = 23
+        Top = 121
+        Width = 447
+        Anchors = [akTop, akLeft, akRight]
+        EditLabel.Height = 15
+        EditLabel.Width = 447
+        EditLabel.Caption = 'Path to FFmpeg:'
+        TabOrder = 4
+        TextHint = 'Choose where FFMPEG is saved...'
+      end
+      object BtnOpenFfmpegDl: TButton
+        Left = 457
+        Height = 25
+        Hint = 'Download FFmpeg binaries...'
+        Top = 120
+        Width = 99
+        Anchors = [akTop, akRight]
+        Caption = 'Download'
+        TabOrder = 5
+        OnClick = BtnOpenFfmpegDlClick
+        OnMouseEnter = BtnOpenFfmpegDlMouseEnter
+      end
+      object CbTargetFmt: TComboBox
+        Left = 7
+        Height = 23
+        Top = 173
+        Width = 628
+        Anchors = [akTop, akLeft, akRight]
+        ItemHeight = 15
+        ItemIndex = 0
+        Items.Strings = (
+          'Audio - MP3'
+          'Audio - WAV'
+          'Audio - FLAC'
+        )
+        ReadOnly = True
+        Style = csDropDownList
+        TabOrder = 6
+        Text = 'Audio - MP3'
+      end
+      object Label2: TLabel
+        Left = 7
+        Height = 15
+        Top = 153
+        Width = 74
+        Caption = 'Target format:'
+      end
+      object BtnChooseFfmpeg: TButton
+        Left = 560
+        Height = 25
+        Top = 120
+        Width = 75
+        Anchors = [akTop, akRight]
+        Caption = 'Choose...'
+        TabOrder = 7
+        OnClick = BtnChooseFfmpegClick
+      end
+      object BtnSameAsSource: TButton
+        Left = 457
+        Height = 25
+        Hint = 'Set the output folder to the same location as the source folder.'
+        Top = 72
+        Width = 99
+        Anchors = [akTop, akRight]
+        Caption = 'Set from source'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 8
+        OnClick = BtnSameAsSourceClick
+        OnMouseEnter = BtnSameAsSourceMouseEnter
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Advanced'
+      ClientHeight = 212
+      ClientWidth = 640
+      object ScrollBox1: TScrollBox
+        Left = 0
+        Height = 212
+        Top = 0
+        Width = 640
+        HorzScrollBar.Page = 139
+        VertScrollBar.Page = 23
+        Align = alClient
+        ClientHeight = 208
+        ClientWidth = 636
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 8
+          Height = 15
+          Top = 8
+          Width = 131
+          Caption = 'Coming in next update...'
+        end
+      end
+    end
+  end
   object LblTitle: TLabel
     Left = 16
     Height = 48
@@ -783,149 +940,50 @@ object FormMain: TFormMain
     Font.Quality = fqDraft
     ParentFont = False
   end
-  object TbSource: TLabeledEdit
-    Left = 16
+  object StatusBar: TStatusBar
+    Left = 0
     Height = 23
-    Hint = 'Enter the path of the source folder or drag a file here to select it.'
-    Top = 96
-    Width = 450
-    Anchors = [akTop, akLeft, akRight]
-    EditLabel.Height = 15
-    EditLabel.Width = 450
-    EditLabel.Caption = 'Source folder:'
-    TabOrder = 0
-    TextHint = 'Choose folder with files to convert...'
-  end
-  object BtnChooseSource: TButton
-    Left = 474
-    Height = 25
-    Top = 95
-    Width = 75
-    Anchors = [akTop, akRight]
-    Caption = 'Choose...'
-    TabOrder = 1
-    OnClick = BtnChooseSourceClick
-  end
-  object TbOutput: TLabeledEdit
-    Left = 16
-    Height = 23
-    Top = 144
-    Width = 357
-    Anchors = [akTop, akLeft, akRight]
-    EditLabel.Height = 15
-    EditLabel.Width = 357
-    EditLabel.Caption = 'Output folder:'
-    TabOrder = 2
-    TextHint = 'Choose output folder...'
-  end
-  object BtnChooseOut: TButton
-    Left = 485
-    Height = 25
-    Top = 143
-    Width = 64
-    Anchors = [akTop, akRight]
-    Caption = 'Choose...'
-    TabOrder = 3
-    OnClick = BtnChooseOutClick
-  end
-  object TbFfmpeg: TLabeledEdit
-    Left = 16
-    Height = 23
-    Top = 192
-    Width = 370
-    Anchors = [akTop, akLeft, akRight]
-    EditLabel.Height = 15
-    EditLabel.Width = 370
-    EditLabel.Caption = 'Path to FFmpeg:'
-    TabOrder = 4
-    TextHint = 'Choose where FFMPEG is saved...'
-  end
-  object BtnOpenFfmpegDl: TButton
-    Left = 474
-    Height = 25
-    Hint = 'Download FFmpeg binaries...'
-    Top = 191
-    Width = 75
-    Anchors = [akTop, akRight]
-    Caption = 'Download'
-    TabOrder = 5
-    OnClick = BtnOpenFfmpegDlClick
-    OnMouseEnter = BtnOpenFfmpegDlMouseEnter
-  end
-  object CbTargetFmt: TComboBox
-    Left = 16
-    Height = 23
-    Top = 245
-    Width = 533
-    Anchors = [akTop, akLeft, akRight]
-    ItemHeight = 15
-    ItemIndex = 0
-    Items.Strings = (
-      'Audio - MP3'
-      'Audio - WAV'
-      'Audio - FLAC'
-    )
-    ReadOnly = True
-    Style = csDropDownList
-    TabOrder = 6
-    Text = 'Audio - MP3'
-  end
-  object Label2: TLabel
-    Left = 16
-    Height = 15
-    Top = 224
-    Width = 74
-    Caption = 'Target format:'
-  end
-  object BtnChooseFfmpeg: TButton
-    Left = 394
-    Height = 25
-    Top = 191
-    Width = 75
-    Anchors = [akTop, akRight]
-    Caption = 'Choose...'
-    TabOrder = 7
-    OnClick = BtnChooseFfmpegClick
+    Top = 458
+    Width = 665
+    Panels = <>
+    SimpleText = 'Welcome'
   end
   object BtnConvert: TButton
-    Left = 472
-    Height = 28
-    Top = 409
+    Left = 579
+    Height = 31
+    Top = 420
     Width = 77
     Anchors = [akRight, akBottom]
     Caption = 'Convert...'
-    TabOrder = 8
+    TabOrder = 2
     OnClick = BtnConvertClick
   end
-  object BtnOptions: TButton
-    Left = 96
-    Height = 28
-    Top = 409
+  object BtnAbout: TButton
+    Left = 168
+    Height = 31
+    Top = 420
     Width = 75
     Anchors = [akLeft, akBottom]
-    Caption = 'Options'
-    Enabled = False
-    TabOrder = 9
+    Caption = 'About'
+    TabOrder = 3
+    OnClick = BtnAboutClick
   end
-  object BtnSameAsSource: TButton
-    Left = 381
-    Height = 25
-    Hint = 'Set the output folder to the same location as the source folder.'
-    Top = 143
-    Width = 99
-    Anchors = [akTop, akRight]
-    Caption = 'Set from source'
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 10
-    OnClick = BtnSameAsSourceClick
-    OnMouseEnter = BtnSameAsSourceMouseEnter
+  object BtnTools: TButton
+    Left = 88
+    Height = 31
+    Hint = 'View toolbox...'
+    Top = 420
+    Width = 75
+    Anchors = [akLeft, akBottom]
+    Caption = 'Tools...'
+    TabOrder = 4
+    OnClick = BtnToolsClick
   end
   object ExecOutput: TMemo
-    Left = 16
-    Height = 120
-    Top = 280
-    Width = 533
+    Left = 8
+    Height = 91
+    Top = 320
+    Width = 648
     Anchors = [akTop, akLeft, akRight, akBottom]
     Color = clWindowText
     Font.CharSet = ANSI_CHARSET
@@ -939,36 +997,17 @@ object FormMain: TFormMain
     ParentFont = False
     ReadOnly = True
     ScrollBars = ssAutoBoth
-    TabOrder = 11
+    TabOrder = 5
   end
-  object BtnAbout: TButton
-    Left = 176
-    Height = 28
-    Top = 409
+  object BtnOptions: TButton
+    Left = 8
+    Height = 31
+    Top = 420
     Width = 75
     Anchors = [akLeft, akBottom]
-    Caption = 'About'
-    TabOrder = 12
-    OnClick = BtnAboutClick
-  end
-  object BtnTools: TButton
-    Left = 16
-    Height = 28
-    Hint = 'View toolbox...'
-    Top = 409
-    Width = 75
-    Anchors = [akLeft, akBottom]
-    Caption = 'Tools...'
-    TabOrder = 13
-    OnClick = BtnToolsClick
-  end
-  object StatusBar: TStatusBar
-    Left = 0
-    Height = 23
-    Top = 446
-    Width = 560
-    Panels = <>
-    SimpleText = 'Welcome'
+    Caption = 'Options'
+    Enabled = False
+    TabOrder = 6
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
     Title = 'Select source folder...'
