@@ -930,6 +930,7 @@ object FormMain: TFormMain
         object TbBitrate: TTrackBar
           Left = 3
           Height = 25
+          Hint = 'Sets the target Constant Bit Rate (CBR) for '#13#10'MP3 audio Kbit/s (kilobits per second). '#13#10'Higher values increase quality and file size. '#13#10'(FFmpeg parameter: -b:a [value]k)'
           Top = 27
           Width = 572
           Max = 16
@@ -961,6 +962,7 @@ object FormMain: TFormMain
         object SeSampleRate: TSpinEdit
           Left = 120
           Height = 23
+          Hint = 'Sets the audio sample rate (samples per second) in Hz. '#13#10'Common values: 44100 (CD), 48000 (DVD/Video). '#13#10'Affects quality and file size. Select "Keep Original" to '#13#10'match the source.  (FFmpeg parameter: -ar [value])'
           Top = 65
           Width = 64
           MaxValue = 192000
@@ -978,6 +980,7 @@ object FormMain: TFormMain
         object CbAudioChannels: TComboBox
           Left = 120
           Height = 23
+          Hint = 'Sets the number of audio channels. '#13#10'Typically 1 (Mono) or 2 (Stereo). Select "Keep Original" to '#13#10'match the source. (FFmpeg parameter: -ac [value])'
           Top = 99
           Width = 144
           ItemHeight = 15
